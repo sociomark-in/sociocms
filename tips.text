@@ -1,0 +1,16 @@
+
+$image = imagecreatefromjpeg('example.jpg');
+
+
+Image Convert from JPG to WEBP Online.
+==========================================
+imagewebp($image, 'example.webp');
+
+
+Image Resize to New Width and Height.
+==========================================
+imagescale ( $image , $new_width , $new_height = -1)
+
+imagedestroy($image);
+
+
