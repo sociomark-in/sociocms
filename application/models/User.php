@@ -5,7 +5,7 @@ class User extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->table['users'] = 'cms_vcdojtxev66laxb1_users';
+        $this->table['users'] = 'app_application_users';
     }
 
     public function get($select = null, $where = null)

@@ -23,7 +23,8 @@ class AuthenticationController extends BaseController
             $user = $this->User->get(null, ['username' => $this->security->xss_clean($form_data['username'])]);
 
             if(password_verify($form_data['password'], $user['password'])){
-                $this->session->set_userdata($this->APP_ID . "_appuser", $user);
+                $app['app_id'] = $this->APP_ID;
+                $this->session->set_userdata($this->APP_ID . "_appuser", ['user' => $user, 'app' => $app]);
                 redirect($form_data['referrer']);
             } else {
                 print_r($user);

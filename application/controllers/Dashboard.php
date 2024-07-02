@@ -20,24 +20,30 @@ class Dashboard extends RBAController
      * @see https://codeigniter.com/userguide3/general/urls.html
      */
 
+    public $data;
+
     public function __construct()
     {
         parent::__construct();
+        $this->data['base'] = [
+            'APP_ID' => $this->APP_ID,
+            'SITE_URL' => $this->SITE_URL
+        ];
+        $this->data['session'] = $this->session->get_userdata($this->APP_ID . "_appuser");
     }
     public function index()
     {
-        
-        $this->load->admin_dashboard('dashboard/index');
+        $this->load->admin_dashboard('dashboard/index', $this->data);
     }
 
     public function login()
     {
-        $data = [
+        $this->data = [
             'page' => [
                 'title' => "Login Page". " • " . APP_NAME
             ]
         ];
-        $this->load->view('pages/login', $data);
+        $this->load->view('pages/login', $this->data);
     }
     public function register()
     {

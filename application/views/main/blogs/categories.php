@@ -70,7 +70,7 @@
 									foreach ($categories as $key => $category) : ?>
 										<tr>
 											<td><?= $key + 1 ?></td>
-											<td><a href=""><?= $category['title'] ?></a><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#categoryEditModal" data-modal-id="<?= $category['id'] ?>" class="catEditLink">&nbsp;<i class="link-arrow p-1" data-feather="edit-3"></i></a></td>
+											<td><a href="<?= $SITE_URL ?>"><?= $category['title'] ?></a><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#categoryEditModal" data-modal-id="<?= $category['id'] ?>" class="catEditLink">&nbsp;<i class="link-arrow p-1" data-feather="edit-3"></i></a></td>
 											<td><?= $category['parent'] ??= "NA" ?></td>
 											<td><?= $category['blog_count'] ?></td>
 											<td><?= $category['created_at'] ?></td>
@@ -79,35 +79,6 @@
 								endif; ?>
 							</tbody>
 						</table>
-						<script>
-							new DataTable('#leadsDataTable');
-							$(".catEditLink").each((index, elem) => {
-								$(elem).on('click', () => {
-									console.log(elem);
-									requestData = {
-											data: {
-												id: $(elem).attr("data-modal-id")
-											}
-										},
-										$.ajax({
-											method: 'POST',
-											// url: "<?= base_url('api/v2/blogs/category/get') ?>",
-											url: "<?= base_url('api/v2/blogs/category/get') ?>",
-											data: JSON.stringify(requestData),
-											contentType: "application/json; charset=utf-8",
-											success: (data) => {
-												$("select#selectCatParentEdit").val($(elem).attr("data-modal-id"))
-												$("categoryEditModal input[name='title']").val($(elem).attr("data-modal-id"))
-												console.log($("select#selectCatParentEdit"));
-												console.log($(elem).attr("data-modal-id"));
-											},
-											error: (error) => {
-												console.log(error);
-											}
-										})
-								})
-							})
-						</script>
 					</div>
 					<div class="modal fade" id="categoryEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="categoryEditModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
@@ -126,7 +97,6 @@
 										</div>
 										<div class="col-lg-6 col-12">
 											<div class="mb-3">
-												<input type="hidden" name="cat_id" id="catID" value="">
 												<select name="parent" class="form-select" id="selectCatParentEdit">
 													<option value="">Select Parent Category</option>
 													<?php foreach ($categories as $key => $category) : ?>
@@ -138,6 +108,7 @@
 														theme: "bootstrap-5",
 													});
 												</script>
+												<input type="hidden" name="cat_id" value="">
 											</div>
 										</div>
 										<div class="col-lg-auto col-12">
@@ -148,13 +119,40 @@
 									</form>
 								</div>
 								<div class="modal-footer">
-									<?= form_open('') ?>
-									<button type="button" class="btn btn-danger btn-icon-text"><i class="link-arrow btn-icon-prepend" data-feather="trash-2"></i>Delete</button>
+									<?= form_open('api/v2/blogs/category/delete') ?>
+									<input type="hidden" name="cat_id" value="">
+									<button type="submit" class="btn btn-danger btn-icon-text"><i class="link-arrow btn-icon-prepend" data-feather="trash-2"></i>Delete</button>
 									<?= form_close() ?>
 								</div>
 							</div>
 						</div>
 					</div>
+					<script>
+						new DataTable('#leadsDataTable');
+						$(".catEditLink").each((index, elem) => {
+							$(elem).on('click', () => {
+								console.log(elem);
+								$.ajax({
+									method: 'GET',
+									url: "<?= base_url('api/v2/blogs/category/get') ?>",
+									data: {
+										id: $(elem).attr("data-modal-id")
+									},
+									contentType: "application/json; charset=utf-8",
+									success: (data) => {
+										data = JSON.parse(data);
+										$("select#selectCatParentEdit").val(data.data.parent)
+										$("#categoryEditModal input[name='title']").val(data.data.title)
+										$("#categoryEditModal input[name='cat_id']").val(data.data.id)
+										console.log(data);
+									},
+									error: (error) => {
+										console.log(error);
+									}
+								})
+							})
+						})
+					</script>
 				</div>
 			</div>
 		</div>
@@ -202,7 +200,7 @@
 									foreach ($tags as $key => $tag) : ?>
 										<tr>
 											<td><?= $key + 1 ?></td>
-											<td><a href=""><?= $tag['title'] ?></a><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#tagEditModal" data-modal-id="<?= $tag['id'] ?>" class="tagEditLink">&nbsp;<i class="link-arrow p-1" data-feather="edit-3"></i></a></td>
+											<td><a href="<?= $SITE_URL ?>"><?= $tag['title'] ?></a><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#tagEditModal" data-modal-id="<?= $tag['id'] ?>" class="tagEditLink">&nbsp;<i class="link-arrow p-1" data-feather="edit-3"></i></a></td>
 											<td><?= $tag['blog_count'] ?></td>
 											<td><?= $tag['created_at'] ?></td>
 										</tr>
@@ -215,39 +213,36 @@
 							$(".tagEditLink").each((index, elem) => {
 								$(elem).on('click', () => {
 									console.log(elem);
-									requestData = {
-											data: {
-												id: $(elem).attr("data-modal-id")
-											}
+									$.ajax({
+										method: 'GET',
+										url: "<?= base_url('api/v2/blogs/tag/get') ?>",
+										data: {
+											id: $(elem).attr("data-modal-id")
 										},
-										$.ajax({
-											method: 'POST',
-											// url: "<?= base_url('api/v2/blogs/category/get') ?>",
-											url: "<?= base_url('api/v2/blogs/category/get') ?>",
-											data: JSON.stringify(requestData),
-											contentType: "application/json; charset=utf-8",
-											success: (data) => {
-												$("select#selectCatParentEdit").val($(elem).attr("data-modal-id"))
-												$("categoryEditModal input[name='title']").val($(elem).attr("data-modal-id"))
-												console.log($("select#selectCatParentEdit"));
-												console.log($(elem).attr("data-modal-id"));
-											},
-											error: (error) => {
-												console.log(error);
-											}
-										})
+										contentType: "application/json; charset=utf-8",
+										success: (data) => {
+											data = JSON.parse(data);
+											$("select#selectCatParentEdit").val(data.data.parent)
+											$("#tagEditModal input[name='title']").val(data.data.title)
+											$("#tagEditModal input[name='cat_id']").val(data.data.id)
+											console.log(data);
+										},
+										error: (error) => {
+											console.log(error);
+										}
+									})
 								})
 							})
 						</script>
-						<div class="modal fade" id="tagEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="categoryEditModalLabel" aria-hidden="true">
+						<div class="modal fade" id="tagEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="tagEditModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h1 class="modal-title fs-5" id="categoryEditModalLabel">Edit Category</h1>
+										<h1 class="modal-title fs-5" id="tagEditModalLabel">Edit Tag</h1>
 										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 									</div>
 									<div class="modal-body">
-										<?= form_open('api/v2/blogs/tag/add') ?>
+										<?= form_open('api/v2/blogs/tag/edit') ?>
 										<div class="row">
 											<div class="col-lg col-12">
 												<div class="mb-3">

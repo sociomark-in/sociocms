@@ -8,7 +8,7 @@ class BlogsModel extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->table['blogs'] = 'cms_vcdojtxev66laxb1_posts';
+		$this->table['blogs'] = 'app_application_posts';
 	}
 
 	public function get_all($columns = null, $where = null)

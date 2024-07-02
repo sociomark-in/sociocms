@@ -1,6 +1,6 @@
 <?php
-
-class BlogsController extends CI_Controller
+require_once APPPATH . "controllers/base/RBAController.php";
+class BlogsController extends RBAController
 {
 	public $data;
 
@@ -9,12 +9,27 @@ class BlogsController extends CI_Controller
 		parent::__construct();
 		$this->load->model('data/BlogsModel');
 		$this->load->model('data/AuthorsModel');
-		$this->data = null;
+		$this->load->model('blogposts/CategoryModel');
+		$this->data['session'] = $this->session->get_userdata($this->APP_ID . "_appuser");
 	}
+
+	/*
+	$route["api/v2/blogs/category/add"] = "BlogsController/api_category_insert";
+$route["api/v2/blogs/category/get"] = "BlogsController/api_category_get";
+$route["api/v2/blogs/category/edit"] = "BlogsController/api_category_edit";
+$route["api/v2/blogs/category/delete"] = "BlogsController/api_category_delete";
+
+$route["api/v2/blogs/tag/add"] = "BlogsController/api_tag_insert";
+$route["api/v2/blogs/tag/edit"] = "BlogsController/api_tag_edit";
+$route["api/v2/blogs/tag/delete"] = "BlogsController/api_tag_delete"; 
+	*/
 
 	/* Get All Categories */
 	public function api_category_get()
 	{
+		$data = $this->input->get();
+		$result = $this->CategoryModel->get(null, ['id' => $data['id']])[0];
+		return $this->output->set_content_type('application/json')->set_output(json_encode(['status' => 'active', 'data' => $result]));
 	}
 	/* Get Single Category */
 	public function api_category_get_single()
@@ -32,12 +47,27 @@ class BlogsController extends CI_Controller
 	public function api_category_update()
 	{
 		$form_data = $this->input->post();
-		$data = $form_data;
-		$this->load->model('blogposts/CategoryModel');
-		if ($this->CategoryModel->insert($data)) {
+		foreach ($form_data as $key => $field) {
+			if (!empty($field) || is_string($field) && trim($field) !== "") {
+				$data[$key] = $field;
+			}
+		}
+		$where = array_pop($data);
+		// print_r($data);
+		// print_r($where);
+		if ($this->CategoryModel->update(['id' => $where], $data)) {
 			redirect($this->input->get_request_header('Referer'));
 		}
 	}
+	public function api_category_delete()
+	{
+		$data = $this->input->post('cat_id');
+		if ($this->CategoryModel->delete(['id' => $data])) {
+			redirect($this->input->get_request_header('Referer'));
+		}
+	}
+
+
 	public function api_tag_insert()
 	{
 		$form_data = $this->input->post();
@@ -49,7 +79,18 @@ class BlogsController extends CI_Controller
 			redirect($this->input->get_request_header('Referer'));
 		}
 	}
-
+	public function api_tag_get()
+	{
+		$data = $this->input->get();
+		$result = $this->TagModel->get(null, ['id' => $data['id']])[0];
+		return $this->output->set_content_type('application/json')->set_output(json_encode(['status' => 'active', 'data' => $result]));
+	}
+	public function api_tag_edit()
+	{
+	}
+	public function api_tag_delete()
+	{
+	}
 	public function home()
 	{
 		$blogs = json_decode($this->BlogsModel->get_all(['title', 'author_id', 'category', 'tags', 'created_at', 'uslug', 'views', 'status']), true);
@@ -86,6 +127,10 @@ class BlogsController extends CI_Controller
 
 	public function new_post()
 	{
+		$this->load->model('blogposts/CategoryModel');
+		$this->load->model('blogposts/TagModel');
+		$this->data['categories'] = $this->CategoryModel->get();
+		$this->data['tags'] = $this->TagModel->get();
 		$this->load->admin_dashboard('blogs/new', $this->data);
 	}
 
@@ -93,6 +138,10 @@ class BlogsController extends CI_Controller
 
 	public function edit($slug)
 	{
+		$this->load->model('blogposts/CategoryModel');
+		$this->load->model('blogposts/TagModel');
+		$this->data['categories'] = $this->CategoryModel->get();
+		$this->data['tags'] = $this->TagModel->get();
 		$this->load->admin_dashboard('blogs/edit', $this->data);
 	}
 

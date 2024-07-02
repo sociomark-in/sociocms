@@ -72,61 +72,62 @@
 					</ul>
 				</div>
 			</li>
-			
 
-			<!-- Blogs -->
-			<li class="nav-item nav-category">Content Management</li>
-			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="collapse" href="#testimonials" role="button" aria-expanded="false" aria-controls="testimonials">
-					<i class="link-icon" data-feather="message-circle"></i>
-					<span class="link-title">Testimonials</span>
-					<i class="link-arrow" data-feather="chevron-down"></i>
-				</a>
-				<div class="collapse" id="testimonials">
-					<ul class="nav sub-menu">
-						<li class="nav-item">
-							<a href="#" class="nav-link">Text Testimonials</a>
-						</li>
-						<li class="nav-item">
-							<a href="#" class="nav-link">YouTube Testimonials</a>
-						</li>
-					</ul>
-				</div>
-			</li>
-			<li class="nav-item <?= link_is_active("locations") ?>">
-				<a class="nav-link" data-bs-toggle="collapse" href="#locations" role="button" aria-expanded="false" aria-controls="locations">
-					<i class="link-icon" data-feather="map-pin"></i>
-					<span class="link-title">Locations</span>
-					<i class="link-arrow" data-feather="chevron-down"></i>
-				</a>
-				<div class="collapse" id="locations">
-					<ul class="nav sub-menu">
-						<li class="nav-item">
-							<a href="<?= base_url('locations') ?>" class="nav-link  <?= link_is_active("locations") ?>">All Locations</a>
-						</li>
-					</ul>
-				</div>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="collapse" href="#cm_article" role="button" aria-expanded="false" aria-controls="cm_article">
-					<i class="link-icon" data-feather="file"></i>
-					<span class="link-title">Clinical Manuscripts</span>
-					<i class="link-arrow" data-feather="chevron-down"></i>
-				</a>
-				<div class="collapse" id="cm_article">
-					<ul class="nav sub-menu">
-						<li class="nav-item">
-							<a href="<?= base_url('') ?>" class="nav-link">
-								<span class="link-title">All Manuscripts</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</li>
+			<?php if ($session['user']['role'] == 1) : ?>
+				<!-- Blogs -->
+				<li class="nav-item nav-category">Content Management</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="collapse" href="#testimonials" role="button" aria-expanded="false" aria-controls="testimonials">
+						<i class="link-icon" data-feather="message-circle"></i>
+						<span class="link-title">Testimonials</span>
+						<i class="link-arrow" data-feather="chevron-down"></i>
+					</a>
+					<div class="collapse" id="testimonials">
+						<ul class="nav sub-menu">
+							<li class="nav-item">
+								<a href="#" class="nav-link">Text Testimonials</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">YouTube Testimonials</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="nav-item <?= link_is_active("locations") ?>">
+					<a class="nav-link" data-bs-toggle="collapse" href="#locations" role="button" aria-expanded="false" aria-controls="locations">
+						<i class="link-icon" data-feather="map-pin"></i>
+						<span class="link-title">Locations</span>
+						<i class="link-arrow" data-feather="chevron-down"></i>
+					</a>
+					<div class="collapse" id="locations">
+						<ul class="nav sub-menu">
+							<li class="nav-item">
+								<a href="<?= base_url('locations') ?>" class="nav-link  <?= link_is_active("locations") ?>">All Locations</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" data-bs-toggle="collapse" href="#cm_article" role="button" aria-expanded="false" aria-controls="cm_article">
+						<i class="link-icon" data-feather="file"></i>
+						<span class="link-title">Clinical Manuscripts</span>
+						<i class="link-arrow" data-feather="chevron-down"></i>
+					</a>
+					<div class="collapse" id="cm_article">
+						<ul class="nav sub-menu">
+							<li class="nav-item">
+								<a href="<?= base_url('') ?>" class="nav-link">
+									<span class="link-title">All Manuscripts</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
+			<?php endif ?>
 			<!-- Access Level: admin -->
-
-			<li class="nav-item nav-category">User Management</li>
-			<!-- <li class="nav-item">
+			<?php if ($session['user']['role'] == 1) : ?>
+				<li class="nav-item nav-category">User Management</li>
+				<!-- <li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#emails" role="button" aria-expanded="false" aria-controls="emails">
 					<i class="link-icon" data-feather="users"></i>
 					<span class="link-title">Jury Panel</span>
@@ -144,34 +145,35 @@
 				</div>
 			</li> -->
 
-			<li class="nav-item">
-				<a href="dashboard.html" class="nav-link">
-					<i class="link-icon" data-feather="users"></i>
-					<span class="link-title">Users</span>
-				</a>
-			</li>
-			<li class="nav-item">
-				<a href="dashboard.html" class="nav-link">
-					<i class="link-icon" data-feather="settings"></i>
-					<span class="link-title">Settings</span>
-				</a>
-			</li>
+				<li class="nav-item">
+					<a href="dashboard.html" class="nav-link">
+						<i class="link-icon" data-feather="users"></i>
+						<span class="link-title">Users</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="dashboard.html" class="nav-link">
+						<i class="link-icon" data-feather="settings"></i>
+						<span class="link-title">Settings</span>
+					</a>
+				</li>
 
-			<li class="nav-item nav-category">Apps</li>
-			<li class="nav-item">
-				<a href="dashboard.html" class="nav-link">
-					<i class="link-icon" data-feather="settings"></i>
-					<span class="link-title">App Settings</span>
-				</a>
-			</li>
-
+				<li class="nav-item nav-category">Apps</li>
+				<li class="nav-item">
+					<a href="dashboard.html" class="nav-link">
+						<i class="link-icon" data-feather="settings"></i>
+						<span class="link-title">App Settings</span>
+					</a>
+				</li>
+			<?php endif ?>
 			<li class="nav-item nav-category">Docs</li>
 			<li class="nav-item">
-				<a href="https://www.nobleui.com/html/documentation/docs.html" target="_blank" class="nav-link">
+				<a href="javascript:void(0)" target="_blank" class="nav-link">
 					<i class="link-icon" data-feather="hash"></i>
 					<span class="link-title">Documentation</span>
 				</a>
 			</li>
+
 		</ul>
 	</div>
 </nav>
